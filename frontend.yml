@@ -1,0 +1,53 @@
+name: Template CI/CD
+
+on:
+  push:
+    branches: [ "master" ]
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-universal
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  DEPLOY_DIR: /opt/myapp/im-tool
+  PROJECT_NAME: im-tool
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT != '' && secrets.SSH_PORT || '22' }}
+          source: "Dockerfile, certs, docker-compose.yml,nginx.conf, bun.lockb, compomemts.json, postcss.config.js, tailwind.config.ts, public, src, package.json, package-lock.json, tsconfig.app.json, tsconfig.json, tsconfig.node.json, vite.config.ts, index.html, eslint.config.js"
+          target: ${{ env.DEPLOY_DIR }}
+          overwrite: true
+          strip_components: 0
+
+      - uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT != '' && secrets.SSH_PORT || '22' }}
+          envs: DEPLOY_DIR,PROJECT_NAME
+          script: |
+            set -e
+            cd "$DEPLOY_DIR"
+            if [ -f "Makefile" ]; then
+              make build
+              make migrate
+              make up
+            else
+              docker compose down || true
+              docker compose build
+              docker compose up -d || true
+            fi
