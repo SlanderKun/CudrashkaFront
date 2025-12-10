@@ -13,8 +13,8 @@ permissions:
   contents: read
 
 env:
-  DEPLOY_DIR: /opt/myapp/im-tool
-  PROJECT_NAME: im-tool
+  DEPLOY_DIR: /opt/myapp/CudrashkaFront
+  PROJECT_NAME: cudrashka-front
 
 jobs:
   deploy:
