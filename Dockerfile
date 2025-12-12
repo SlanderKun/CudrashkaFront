@@ -2,8 +2,8 @@ FROM node:20 AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
+COPY ../.env .env
 COPY . .
-COPY ../.env
 RUN npm run build
 
 FROM nginx:stable
