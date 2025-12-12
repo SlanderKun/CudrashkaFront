@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { RootStoreProvider, RootStoreContext } from './store/RootStore';
+import { PagesRouter } from './PagesRouter';
+import { Header } from './components/Layout/Header';
 
-function App() {
-  const [count, setCount] = useState(0)
+const contentStyle: React.CSSProperties = {
+    paddingBottom: '20px', 
+    minHeight: 'calc(100vh - 60px)'
+};
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+const ContentWrapper: React.FC = () => {
+    const { user } = React.useContext(RootStoreContext); 
 
-export default App
+
+    const showHeader = user.isLoggedIn;
+
+    return (
+        <React.Fragment>
+            {}
+            {showHeader && <Header />}
+
+            {}
+            <main style={contentStyle}>
+                <PagesRouter />
+            </main>
+
+            {}
+        </React.Fragment>
+    );
+};
+
+const App: React.FC = () => {
+    return (
+        <RootStoreProvider>
+            <BrowserRouter>
+                <ContentWrapper />
+            </BrowserRouter>
+        </RootStoreProvider>
+    );
+};
+
+export default App;
