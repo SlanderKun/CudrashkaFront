@@ -4,7 +4,6 @@ import PageLayout from "./shared/UI/PageLayout/PageLayout.tsx";
 import {Context} from "./main.tsx";
 import {useContext, useEffect} from "react";
 import {observer} from "mobx-react-lite";
-import BonusPage from "./pages/Bonus/BonusPage.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import HomePage from "./pages/HomePage/HomePage.tsx";
 
