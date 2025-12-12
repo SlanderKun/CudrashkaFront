@@ -2,27 +2,21 @@ import type { AxiosResponse } from "axios";
 import apiInstance from "../core/httpConfig.ts";
 import type {AuthResponse} from "../models/auth/AuthResponse.ts";
 
-//пример сревиса
-
 export default class AuthService {
     static async login(data: {
-        email: string,
+        phone: string,
         password: string,
-    }): Promise<AxiosResponse<AuthResponse>> {
-        return apiInstance.post<AuthResponse>(`/login`, data);
+    }) {
+        return apiInstance.post<AuthResponse>(`/auth/signin`, data);
     }
     static async register(data: {
-        email: string,
+        phone: string,
         password: string,
     }): Promise<AxiosResponse<AuthResponse>> {
-        return apiInstance.post<AuthResponse>(`/register`, data,
-        {
-            withCredentials: true,
-        });
+        return apiInstance.post<AuthResponse>(`/auth/signup`, data);
     }
-    static async checkAuth(): Promise<AxiosResponse<AuthResponse>> {
-        return await apiInstance.post<AuthResponse>(`/refresh-tokens`,
-            {},
+    static async checkAuth() {
+        return await apiInstance.get<AuthResponse>(`/auth/me`,
             {
                 withCredentials: true,
             },

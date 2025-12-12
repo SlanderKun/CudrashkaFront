@@ -1,0 +1,74 @@
+.background {
+    min-width: 668px;
+    width: 40%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0 40px 40px 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-color: #FFFFFF;
+}
+.modal {
+    width: 100%;
+    height: auto;
+    margin: 0 58px 0 38px;
+    border-radius: 20px;
+    padding: 48px;
+    background-color: #9ED3F7;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+.headerText {
+    text-transform: uppercase;
+    font-family: Inter, sans-serif;
+    font-weight: 600;
+    font-size: 32px;
+    color: #1E75AD;
+}
+.buttonsList{
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+.formInput{
+    height: 56px;
+}
+.submitButton{
+    height: 61px;
+    width: 100%;
+}
+.subButton{
+    text-transform: uppercase;
+    font-family: Inter, sans-serif;
+    font-weight: 600;
+    font-size: 32px;
+    color: #1E75AD;
+    display: flex;
+    gap: 3px;
+    justify-content: center;
+    user-select: none;
+}
+.subButton__text{
+    color: black;
+    font-family: Inter, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 100%;
+}
+.subButton__Button{
+    font-family: Inter, sans-serif;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 100%;
+    color: #2029D0;
+}
+.circle{
+    position: fixed;
+    border-radius: 50%;
+    background-color: #9ED3F7;
+}
