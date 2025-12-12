@@ -3,41 +3,82 @@ import { useStore } from '../../store/useStore';
 import { Button } from '../UI/Button';
 
 export const AuthForm: React.FC = () => {
-    const { login } = useStore();
-    const [phoneInput, setPhoneInput] = useState('');
-    const [passwordInput, setPasswordInput] = useState('');
+    const { login, register } = useStore();
+    const [isLoginMode, setIsLoginMode] = useState(true);
+    
+    const [phone, setPhone] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
-    const handleLogin = (e: React.FormEvent) => {
+    const formatPhone = (value: string) => {
+        const digits = value.replace(/\D/g, '');
+        if (digits.length === 0) return '';
+        if (digits[0] === '7' || digits[0] === '8') {
+             const rest = digits.substring(1, 11);
+             let res = '+7';
+             if (rest.length > 0) res += ` (${rest.substring(0, 3)}`;
+             if (rest.length >= 3) res += `) ${rest.substring(3, 6)}`;
+             if (rest.length >= 6) res += `-${rest.substring(6, 8)}`;
+             if (rest.length >= 8) res += `-${rest.substring(8, 10)}`;
+             return res;
+        }
+        return '+7 ' + digits.substring(0, 10);
+    };
+
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPhone(formatPhone(e.target.value));
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        login(phoneInput); 
+        const cleanPhone = phone.replace(/\D/g, '');
+        if (cleanPhone.length < 11) {
+            alert('Введите корректный номер телефона');
+            return;
+        }
+
+        if (isLoginMode) {
+            login(phone, password);
+        } else {
+            if (!username) return;
+            register(phone, username, password);
+        }
     };
 
     return (
-        // 1. ОБЩИЙ ФОН ("Синеватый как облака")
         <div style={pageBackgroundStyle}>
-            
-            {/* 2. БЕЛАЯ КАРТОЧКА ПО ЦЕНТРУ */}
             <div style={whiteCardStyle}>
-                
-                {/* Логотип и заголовок */}
                 <div style={{ marginBottom: '30px' }}>
-                    <h1 style={{ color: '#3d3d3dff', fontSize: '2rem', margin: '0 0 5px' }}>
+                    <h1 style={{ color: '#3d3d3d', fontSize: '2rem', margin: '0 0 5px' }}>
                         Кудряшка
                     </h1>
-                    <p style={{ color: '#8898AA', margin: 0, fontSize: '0.9rem' }}>
-                        Вход в бонусную систему
+                    <p style={{ color: '#8898AA', fontSize: '0.9rem' }}>
+                        {isLoginMode ? 'Вход в систему' : 'Создание аккаунта'}
                     </p>
                 </div>
 
-                <form onSubmit={handleLogin}>
-                    {/* 3. ПОЛЯ ВВОДА (Голубые) */}
+                <form onSubmit={handleSubmit}>
+                    {!isLoginMode && (
+                        <div style={{ marginBottom: '15px', textAlign: 'left' }}>
+                            <label style={labelStyle}>Имя</label>
+                            <input 
+                                type="text" 
+                                placeholder="Как к вам обращаться?" 
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                required
+                                style={blueInputStyle}
+                            />
+                        </div>
+                    )}
+
                     <div style={{ marginBottom: '15px', textAlign: 'left' }}>
-                        <label style={labelStyle}>Номер телефона</label>
+                        <label style={labelStyle}>Телефон</label>
                         <input 
                             type="tel" 
                             placeholder="+7 (999) 000-00-00" 
-                            value={phoneInput}
-                            onChange={(e) => setPhoneInput(e.target.value)}
+                            value={phone}
+                            onChange={handlePhoneChange}
                             required
                             style={blueInputStyle}
                         />
@@ -48,22 +89,26 @@ export const AuthForm: React.FC = () => {
                         <input 
                             type="password" 
                             placeholder="Введите пароль" 
-                            value={passwordInput}
-                            onChange={(e) => setPasswordInput(e.target.value)}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             required
                             style={blueInputStyle}
                         />
                     </div>
 
-                    {}
-                    <Button type="submit" style={{ padding: '15px', fontSize: '16px', boxShadow: '0 4px 12px rgba(68, 94, 134, 0.4)', background: '#525c69ff' }}>
-                        Войти
+                    <Button type="submit" style={{ background: '#FF85A2' }}>
+                        {isLoginMode ? 'Войти' : 'Создать аккаунт'}
                     </Button>
                 </form>
 
-                <p style={{ color: '#AAB8C2', fontSize: '12px', marginTop: '30px' }}>
-                    Демо-режим: введите любой номер
-                </p>
+                <div style={{ marginTop: '20px' }}>
+                    <button 
+                        onClick={() => setIsLoginMode(!isLoginMode)}
+                        style={{ background: 'none', border: 'none', color: '#8898AA', cursor: 'pointer', textDecoration: 'underline' }}
+                    >
+                        {isLoginMode ? 'Нет аккаунта? Зарегистрироваться' : 'Есть аккаунт? Войти'}
+                    </button>
+                </div>
             </div>
         </div>
     );
@@ -75,10 +120,9 @@ const pageBackgroundStyle: React.CSSProperties = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    background: 'linear-gradient(135deg, #E0F7FA 0%, #E3F2FD 50%, #f5eee5ff 100%)',
+    background: 'linear-gradient(135deg, #E0F7FA 0%, #E3F2FD 50%, #f5eee5 100%)',
     padding: '20px'
 };
-
 
 const whiteCardStyle: React.CSSProperties = {
     backgroundColor: '#ffffff',
@@ -90,7 +134,6 @@ const whiteCardStyle: React.CSSProperties = {
     textAlign: 'center',
 };
 
-
 const blueInputStyle: React.CSSProperties = {
     width: '100%',
     padding: '16px',
@@ -100,8 +143,7 @@ const blueInputStyle: React.CSSProperties = {
     color: '#32325D', 
     fontSize: '16px',
     outline: 'none',
-    transition: 'all 0.2s ease',
-    boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)' 
+    marginBottom: '5px'
 };
 
 const labelStyle: React.CSSProperties = {
@@ -112,5 +154,4 @@ const labelStyle: React.CSSProperties = {
     marginBottom: '8px',
     marginLeft: '5px',
     textTransform: 'uppercase',
-    letterSpacing: '0.5px'
 };

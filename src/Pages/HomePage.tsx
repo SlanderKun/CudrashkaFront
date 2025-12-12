@@ -1,118 +1,74 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import { useStore } from '../store/useStore';
 import { AuthForm } from '../components/Auth/AuthForm'; 
-import { Button } from '../components/UI/Button'; 
-import { QrModal } from '../components/Modal/QrModal'; 
+import { useNavigate } from 'react-router-dom';
+import * as QRCode from 'qrcode';
+import '../css/style.css'; // <-- ИСПРАВЛЕННЫЙ ПУТЬ
 
 export const HomePage: React.FC = () => {
     const { user } = useStore();
+    const navigate = useNavigate();
+    const [qrUrl, setQrUrl] = React.useState('');
+
+    React.useEffect(() => {
+        if (user.phone) {
+            QRCode.toDataURL(`KUDRI-${user.phone}`, { width: 300, margin: 2 })
+                .then(url => setQrUrl(url));
+        }
+    }, [user.phone]);
 
     if (!user.isLoggedIn) {
         return <AuthForm />;
     }
-    
-    const [showQr, setShowQr] = useState(false);
-    const navigate = useNavigate();
 
     return (
-
-        <div style={{ padding: '30px 20px', maxWidth: '600px', margin: '0 auto' }}>
-            
-            {}
-            <div style={{ 
-                backgroundColor: '#fff', 
-                padding: '30px', 
-                borderRadius: '20px', 
-                textAlign: 'center', 
-                marginBottom: '30px',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.08)', 
-            }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
-                    <span style={{ fontSize: '3rem', color: '#FF85A2' }}>🐾</span>
-                    <h2 style={{ 
-                        margin: 0, 
-                        fontSize: '3rem', 
-                        fontWeight: '900',
-                        color: '#333'
-                    }}>
-                        {user.bonusBalance}
-                    </h2>
-                    <span style={{ fontSize: '1.5rem', color: '#FF85A2' }}>бонусов</span>
+        <div className="dashboard-grid">
+            {/* Левая колонка (QR) */}
+            <div className="card" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <h3 style={{ margin: '0 0 20px 0', color: '#333' }}>Ваша карта</h3>
+                <div style={{ border: '4px dashed #FFB7C5', padding: '10px', borderRadius: '15px' }}>
+                    {qrUrl && <img src={qrUrl} alt="QR" style={{ width: '100%', maxWidth: '250px', display: 'block' }} />}
                 </div>
-                <p style={{ margin: '10px 0 0 0', opacity: 0.7, fontSize: '1.2rem' }}>
-                    Ваш текущий баланс 
+                <p style={{ color: '#888', fontSize: '0.9rem', marginTop: '15px' }}>
+                    Покажите администратору для начисления или списания
                 </p>
             </div>
 
-            {}
-            <div style={{ 
-                marginBottom: '40px', 
-                display: 'grid', 
-                gap: '15px' 
-            }}>
-                {}
-                <Button 
-                    onClick={() => setShowQr(true)}
-                    style={{ 
-                        padding: '20px 0', 
-                        fontSize: '1.2rem', 
-                        fontWeight: 'bold',
-                        borderRadius: '15px',
-                        boxShadow: '0 8px 15px rgba(255, 133, 162, 0.4)' 
-                    }}
-                >
-                    Показать QR-код для оплаты
-                </Button>
-                
-                {}
-                <Button 
-                    variant="secondary" 
-                    onClick={() => navigate('/profile')}
-                    style={{ 
-                        padding: '20px 0', 
-                        fontSize: '1.1rem',
-                        borderRadius: '15px',
-                        backgroundColor: '#FFB7C5',
-                        color: '#333'
-                    }}
-                >
-                    Мои ПРОМОКОДЫ и Скидки
-                </Button>
+            {/* Правая колонка (Инфо) */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <div className="card" style={{ background: 'linear-gradient(135deg, #FF85A2 0%, #FFB7C5 100%)', color: 'white' }}>
+                    <h2 style={{ margin: 0, fontSize: '1.2rem', opacity: 0.9 }}>Баланс бонусов</h2>
+                    <div style={{ fontSize: '3.5rem', fontWeight: 'bold' }}>{user.bonusBalance}</div>
+                    <p style={{ margin: 0, opacity: 0.9 }}>1 бонус = 1 рубль</p>
+                </div>
+
+                <div className="card">
+                    <h3 style={{ marginTop: 0 }}>Быстрые действия</h3>
+                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        <button 
+                            onClick={() => navigate('/promocodes')}
+                            style={{ flex: 1, padding: '15px', borderRadius: '12px', border: '1px solid #eee', background: '#fff', cursor: 'pointer', fontWeight: 'bold', color: '#555' }}
+                        >
+                            🎁 Мои Промокоды
+                        </button>
+                        <button 
+                            onClick={() => navigate('/bonuses')}
+                            style={{ flex: 1, padding: '15px', borderRadius: '12px', border: '1px solid #eee', background: '#fff', cursor: 'pointer', fontWeight: 'bold', color: '#555' }}
+                        >
+                            📊 История Бонусов
+                        </button>
+                    </div>
+                </div>
+
+                <div className="card">
+                    <h3 style={{ marginTop: 0, color: '#FF85A2' }}>Правила списания</h3>
+                    <ul style={{ paddingLeft: '20px', lineHeight: '1.6', color: '#555' }}>
+                        <li><b>25%</b> — оплата комплексных услуг</li>
+                        <li><b>50%</b> — оплата уходов и масок</li>
+                        <li>Бонусы действительны 12 месяцев</li>
+                    </ul>
+                </div>
             </div>
-
-            {}
-            <div style={{ 
-                background: '#fff', 
-                padding: '30px', 
-                borderRadius: '20px', 
-                border: '1px solid #eee',
-                boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-            }}>
-                <h3 style={{ marginTop: 0, borderBottom: '2px solid #FFB7C5', paddingBottom: '10px' }}>
-                    Как использовать Бонусы
-                </h3>
-                
-                {}
-                <p style={{ color: '#FF85A2', fontWeight: 'bold', textAlign: 'center', fontSize: '1.1rem', marginBottom: '20px' }}>
-                    Вы всегда получаете 5% от каждого чека обратно!
-                </p>
-
-                {}
-                <ul style={{ paddingLeft: '20px', color: '#555', lineHeight: '1.8' }}>
-                    <li style={{ marginBottom: '10px' }}>
-                        <span style={{ fontWeight: 'bold', color: '#FF85A2' }}>25%</span> — можно оплатить комплексные услуги (стрижка, окрашивание).
-                    </li>
-                    <li style={{ marginBottom: '10px' }}>
-                        <span style={{ fontWeight: 'bold', color: '#FF85A2' }}>50%</span> — можно оплатить дополнительные услуги (маски, уходы, экспресс-укладка).
-                    </li>
-                    <li>
-                        Бонусы не сгорают в течение 12 месяцев.
-                    </li>
-                </ul>
-            </div>
-
-            <QrModal isOpen={showQr} onClose={() => setShowQr(false)} phone={user.phone} />
         </div>
     );
 };
