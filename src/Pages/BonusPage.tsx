@@ -1,9 +1,10 @@
 import React from 'react';
 import { useStore } from '../store/useStore';
 import { useNavigate } from 'react-router-dom';
-import '../css/style.css'; // <-- ИСПРАВЛЕННЫЙ ПУТЬ
+import '../css/style.css';
+import {observer} from "mobx-react-lite"; // <-- ИСПРАВЛЕННЫЙ ПУТЬ
 
-export const BonusPage: React.FC = () => {
+const BonusPage: React.FC = () => {
     const { user } = useStore();
     const navigate = useNavigate();
 
@@ -44,3 +45,5 @@ export const BonusPage: React.FC = () => {
         </div>
     );
 };
+
+export default observer(BonusPage);

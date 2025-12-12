@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useStore } from '../store/useStore';
 import { useNavigate } from 'react-router-dom';
-import '../css/style.css'; // <-- ИСПРАВЛЕННЫЙ ПУТЬ
+import '../css/style.css';
+import {observer} from "mobx-react-lite"; // <-- ИСПРАВЛЕННЫЙ ПУТЬ
 
 type TabType = 'active' | 'used' | 'expired';
 
-export const PromocodesPage: React.FC = () => {
+const PromocodesPage: React.FC = () => {
     const { user } = useStore();
     const navigate = useNavigate();
     const [currentTab, setCurrentTab] = useState<TabType>('active');
@@ -97,3 +98,5 @@ export const PromocodesPage: React.FC = () => {
         </div>
     );
 };
+
+export default observer(PromocodesPage);

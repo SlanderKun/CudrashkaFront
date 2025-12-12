@@ -1,16 +1,18 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { useStore } from '../store/useStore';
 import { AuthForm } from '../components/Auth/AuthForm'; 
 import { useNavigate } from 'react-router-dom';
 import * as QRCode from 'qrcode';
-import '../css/style.css'; // <-- ИСПРАВЛЕННЫЙ ПУТЬ
+import '../css/style.css';
+import {observer} from "mobx-react-lite"; // <-- ИСПРАВЛЕННЫЙ ПУТЬ
 
-export const HomePage: React.FC = () => {
+
+const HomePage: React.FC = () => {
     const { user } = useStore();
     const navigate = useNavigate();
-    const [qrUrl, setQrUrl] = React.useState('');
+    const [qrUrl, setQrUrl] = useState('');
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (user.phone) {
             QRCode.toDataURL(`KUDRI-${user.phone}`, { width: 300, margin: 2 })
                 .then(url => setQrUrl(url));
@@ -72,3 +74,5 @@ export const HomePage: React.FC = () => {
         </div>
     );
 };
+
+export default observer(HomePage);

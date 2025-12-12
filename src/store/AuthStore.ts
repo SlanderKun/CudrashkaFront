@@ -2,8 +2,6 @@ import {makeAutoObservable} from "mobx";
 import type {IProfile} from "../models/profile.ts";
 import AuthService from "../services/AuthService.ts";
 
-// рабочий пример класса, можете по его типу делать свои, только называйте их логично
-
 export default class AuthStore {
     isLoading = false
     isAuth = false
