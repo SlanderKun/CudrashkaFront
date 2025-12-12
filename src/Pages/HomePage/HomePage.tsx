@@ -1,8 +1,8 @@
 import React from 'react';
 import {observer} from "mobx-react-lite";
 import HomeBackground from "../../components/HomePage/HomeBackground/HomeBackground.tsx";
-import BonusesSection from "../../components/HomePage/BonusesSection/BonusesSection.tsx";
-import PromocodesSection from "../../components/HomePage/PromocodesSection/PromocodesSection.tsx";
+// import BonusesSection from "../../components/HomePage/BonusesSection/BonusesSection.tsx";
+// import PromocodesSection from "../../components/HomePage/PromocodesSection/PromocodesSection.tsx";
 import styles from "./styles.module.css"
 
 const HomePage: React.FC = () => {
@@ -10,8 +10,8 @@ const HomePage: React.FC = () => {
         <>
             <HomeBackground>
                 <div className={styles.background}>
-                    <BonusesSection/>
-                    <PromocodesSection/>
+                    {/*<BonusesSection/>*/}
+                    {/*<PromocodesSection/>*/}
                 </div>
             </HomeBackground>
         </>
