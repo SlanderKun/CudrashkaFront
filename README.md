@@ -1,11 +1,11 @@
 Установка зависимостей:
 
-npm install
+`npm install`
 
 Запуск приложения для dev разработки: 
 
-npm run dev
+`npm run dev`
 
 Прод билд(не готов):
 
-npm run build
+`npm run build`
