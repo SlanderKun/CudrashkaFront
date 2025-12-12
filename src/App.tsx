@@ -5,8 +5,8 @@ import {Context} from "./main.tsx";
 import {useContext, useEffect} from "react";
 import {observer} from "mobx-react-lite";
 import BonusPage from "./pages/Bonus/BonusPage.tsx";
-import PromocodesPage from "./pages/Promocodes/PromocodesPage.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
+import HomePage from "./pages/HomePage/HomePage.tsx";
 
 function App() {
     const {store} = useContext(Context);
@@ -28,9 +28,8 @@ function App() {
             {
                 store.AuthStore.isAuth && !store.AuthStore.isLoading ? (
                     <Routes>
-                        <Route path="bonuses/" element={<PageLayout Component={BonusPage}/>} />
-                        <Route path="promocodes/" element={<PageLayout Component={PromocodesPage}/>} />
-                        <Route path="*" element={<Navigate to={'/bonuses/'} replace={true}/>}/>
+                        <Route path="home/" element={<PageLayout Component={HomePage}/>} />
+                        <Route path="*" element={<Navigate to={'/home/'} replace={true}/>}/>
                     </Routes>
                 ) : (
                     <Routes>

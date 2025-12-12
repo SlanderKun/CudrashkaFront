@@ -1,4 +1,5 @@
 .background {
+    display: flex;
     width: 100%;
     height: 100vh;
     background-repeat: no-repeat;
@@ -6,12 +7,16 @@
     background-position: center left;
     background-image: url("../../../shared/assets/loginPage/ea00c5394d99278164a232e4f08bafb666ec3c47.jpg");
 }
+.freeSpace {
+    display: flex;
+    flex-direction: row-reverse;
+    overflow: hidden;
+    padding: 32px;
+    width: 60%;
+}
 .logo{
     height: 142px;
     width: 142px;
     background-image: url("../../../shared/assets/logo/Ellipse 3.png");
-    position: absolute;
-    right: 32px;
-    top: 32px;
     z-index: 1;
 }

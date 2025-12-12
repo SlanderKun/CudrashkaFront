@@ -7,7 +7,8 @@ const apiInstance = axios.create({
   baseURL: API_URL,
 });
 apiInstance.interceptors.request.use((config) => {
-  config.headers.access_token = localStorage.getItem("access_token");
+  config.headers.Authorization = localStorage.getItem("token");
+  console.log(localStorage.getItem("token"));
   return config;
 });
 

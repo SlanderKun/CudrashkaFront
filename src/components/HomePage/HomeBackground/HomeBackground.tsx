@@ -10,8 +10,10 @@ interface IProps {
 const HomeBackground: React.FC<IProps> = ({children}) => {
     return (
         <div className={styles.background}>
-            <div className={styles.logo}/>
             {children}
+            <div className={styles.freeSpace}>
+                <div className={styles.logo}/>
+            </div>
         </div>
     );
 };
